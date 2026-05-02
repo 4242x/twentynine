@@ -10,7 +10,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   late IO.Socket socket;
-  String message = "No messages yet";
+  List<String> msgs = [];
   final TextEditingController controller = TextEditingController();
 
   @override
@@ -21,7 +21,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void initSocket() {
     socket = IO.io(
-      'http://localhost:8000',
+      'http://192.168.1.2:8000',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
@@ -41,6 +41,15 @@ class _ChatScreenState extends State<ChatScreen> {
     socket.onConnectError((err) {
       print('Connect Error: $err');
     });
+
+    socket.on(
+      'msg',
+      (data) => {
+        setState(() {
+          msgs.add(data);
+        }),
+      },
+    );
   }
 
   void sendMessage(String abc) {
@@ -62,14 +71,27 @@ class _ChatScreenState extends State<ChatScreen> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            TextField(controller: controller),
+            TextField(
+              controller: controller,
+              onTapOutside: (_) => {
+                FocusManager.instance.primaryFocus?.unfocus(),
+              },
+            ),
             ElevatedButton(
               onPressed: () {
                 sendMessage(controller.text);
+                controller.clear();
               },
               child: const Text('Send Message'),
             ),
-            
+            Flexible(
+              child: ListView.builder(
+                itemCount: msgs.length,
+                itemBuilder: (context, index) {
+                  return ListTile(title: Text(msgs[index]));
+                },
+              ),
+            ),
           ],
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twentynine/chat_screen.dart';
+import 'package:twentynine/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.green),
       ),
-      home: ChatScreen(),
+      home: HomePage(),
     );
   }
 }
