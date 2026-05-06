@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:twentynine/home_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twentynine/pages/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,9 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TwentyNine',
-      theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.green),
-      ),
+      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.green)),
       home: HomePage(),
     );
   }
