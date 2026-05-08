@@ -20,14 +20,18 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  socket.on('join-room', (roomno) => {
-      socket.join(roomno);
-      console.log('A user joined: ' + roomno);
+  socket.on('join-room', async (roomno) => {
+    socket.join(roomno);
+    const sockets = await io.in('roomno').fetchSockets()
+    const players = sockets.map(s => s.id)
+    io.to(roomno).emit('players-update', players)
   })
 
-    socket.on('leave-room', (roomno) => {
-      socket.leave(roomno);
-      console.log('A user left: ' + roomno);
+  socket.on('leave-room', async (roomno) => {
+    socket.leave(roomno);
+    const sockets = await io.in('roomno').fetchSockets()
+    const players = sockets.map(s => s.id)
+    io.to(roomno).emit('players-update', players)
   })
 
   socket.on('disconnect', () => {

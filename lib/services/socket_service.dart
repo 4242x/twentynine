@@ -1,8 +1,11 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:twentynine/providers/players_provider.dart';
 
 class SocketService {
   late IO.Socket socket;
-    
+  late Ref ref;
+
   void initSocket() {
     socket = IO.io(
       'http://localhost:8000',
@@ -16,6 +19,10 @@ class SocketService {
 
     socket.onConnect((_) {
       print('Connected');
+    });
+
+    socket.on('players-update',(players){
+      ref.read(playersProvider.notifier).updatePlayers(players);
     });
 
     socket.onDisconnect((_) {

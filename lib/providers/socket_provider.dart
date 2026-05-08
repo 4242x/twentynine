@@ -8,6 +8,5 @@ final socketServiceProvider = Provider<SocketService>((ref){
   ref.onDispose((){
     service.dispose();
   });
-
   return service;
 });

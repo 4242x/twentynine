@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:twentynine/providers/players_provider.dart';
 import 'package:twentynine/providers/socket_provider.dart';
 
 class WaitingPage extends ConsumerStatefulWidget {
@@ -11,11 +12,11 @@ class WaitingPage extends ConsumerStatefulWidget {
 }
 
 class _WaitingPageState extends ConsumerState<WaitingPage> {
-  List<String> players = ['You'];
 
   @override
   Widget build(BuildContext context) {
     final socket = ref.read(socketServiceProvider);
+    final players = ref.read(playersProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
