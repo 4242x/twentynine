@@ -26,12 +26,14 @@ class HomePage extends ConsumerWidget {
               ),
               onTap: () {
                 socket.joinRoom(controller.text.trim());
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        WaitingPage(roomID: controller.text.trim()),
-                  ),
-                );
+                socket.onRoomJoined(() {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          WaitingPage(roomID: controller.text.trim()),
+                    ),
+                  );
+                });
               },
             ),
           ],
