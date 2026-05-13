@@ -10,6 +10,17 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 4,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Text('9 H'),
+            title: Text('Socket id'),
+          );
+        },
+      ),
+    );
   }
 }
