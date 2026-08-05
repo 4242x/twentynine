@@ -68,25 +68,26 @@ io.on('connection', (socket) => {
       const gameState = new Map();
       const suits = ['Heart', 'Diamond', 'Club', 'Spade']
       const ranks = ['J', '9', 'A', '10', 'K', 'Q', '8', '7']
+      const deck: { suit: string, rank: string }[] = []
+
       suits.forEach(suit => {
         ranks.forEach(rank => {
-          const randomPlayer = players[Math.floor(Math.random() * players.length)]
-          if (!gameState.has(randomPlayer)) {
-            gameState.set(randomPlayer, [{
-              suits: suit,
-              ranks: rank
-            }]
-            )
-          } else {
-            const exState = gameState.get(randomPlayer)
-            gameState.set(randomPlayer, exState + {
-              suits: suit,
-              ranks: rank
-            })
-          }
-        }
-        )
+          deck.push({
+            suit: suit,
+            rank: rank
+          })
+        })
       });
+
+      const ogdeck = [...deck]
+      for (let i = 0; i < deck.length; i++) {
+        const index = Math.floor(Math.random() * ogdeck.length)
+        deck[i] = ogdeck[index]!
+        ogdeck.splice(index , 1)
+      }
+
+      deck.forEach(gameState.get(players))
+
     }
   })
 
