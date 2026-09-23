@@ -29,8 +29,8 @@ io.on('connection', (socket) => {
         gamestarted: false
       })
     }
-    const players = rooms.get(roomno).players;
 
+    const players = rooms.get(roomno).players;
     if (players.length < 4) {
       if (!players.includes(socket.id)) {
         players.push(socket.id);
@@ -70,6 +70,7 @@ io.on('connection', (socket) => {
       const ranks = ['J', '9', 'A', '10', 'K', 'Q', '8', '7']
       const deck: { suit: string, rank: string }[] = []
 
+      // creating deck
       suits.forEach(suit => {
         ranks.forEach(rank => {
           deck.push({
@@ -79,14 +80,19 @@ io.on('connection', (socket) => {
         })
       });
 
+      // shuffeling the deck
       const ogdeck = [...deck]
       for (let i = 0; i < deck.length; i++) {
         const index = Math.floor(Math.random() * ogdeck.length)
         deck[i] = ogdeck[index]!
-        ogdeck.splice(index , 1)
+        ogdeck.splice(index, 1)
       }
 
-      deck.forEach(gameState.get(players))
+      // card distribution
+      players.forEach((player: any) => {
+        gameState.set(player, deck.splice(0, 8));
+        io.to(player).emit('deal_cards', gameState.get(player))
+      })
 
     }
   })

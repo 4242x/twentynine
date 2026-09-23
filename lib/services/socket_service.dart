@@ -23,18 +23,22 @@ class SocketService {
       print('Connected');
     });
 
-    socket.on('players-update',(players){
+    socket.on('players-update', (players) {
       ref.read(playersProvider.notifier).updatePlayers(players);
     });
 
-    socket.on('room-joined', (_){
-          ref.read(readyProvider.notifier).readyState(true);
+    socket.on('room-joined', (_) {
+      ref.read(readyProvider.notifier).readyState(true);
     });
 
-    socket.on('game-started', (_){
+    socket.on('game-started', (_) {
       ref.read(startProvider.notifier).startState(true);
     });
-    
+
+    socket.on('deal_cards', (_) {
+      ref.read(startProvider.notifier).startState(true);
+    });
+
     socket.onDisconnect((_) {
       print('Disconnected');
     });
@@ -47,16 +51,18 @@ class SocketService {
   void joinRoom(String roomID) {
     socket.emit('join-room', roomID);
   }
-  void leaveroom(String roomID){
+
+  void leaveroom(String roomID) {
     socket.emit('leave-room', roomID);
   }
 
-  void onRoomJoined(Function() callback){
-    socket.on('room-joined', (_){
-          callback();
+  void onRoomJoined(Function() callback) {
+    socket.on('room-joined', (_) {
+      callback();
     });
   }
-  void startgame(String roomID){
+
+  void startgame(String roomID) {
     socket.emit('start-game', roomID);
   }
 
