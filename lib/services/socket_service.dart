@@ -1,12 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:twentynine/providers/cards_provider.dart';
 import 'package:twentynine/providers/players_provider.dart';
 import 'package:twentynine/providers/ready_provider.dart';
 import 'package:twentynine/providers/start_provider.dart';
 
 class SocketService {
+  final Ref ref;
   late IO.Socket socket;
-  late Ref ref;
+
+  SocketService(this.ref);
 
   void initSocket() {
     socket = IO.io(
@@ -35,7 +38,10 @@ class SocketService {
       ref.read(startProvider.notifier).startState(true);
     });
 
-    socket.on('deal_cards', (_) {
+    socket.on('deal_cards', (cards) {
+      if (cards is List) {
+        ref.read(cardsProvider.notifier).setCards(cards);
+      }
       ref.read(startProvider.notifier).startState(true);
     });
 
